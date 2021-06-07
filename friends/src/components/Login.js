@@ -1,5 +1,5 @@
-import React from 'react';
-import { axiosWithAuth } from '../utils/axiosWithAuth';
+import React from 'react'
+import { axiosWithAuth } from '../utils/axiosWithAuth'
 
 class Login extends React.Component {
   state = {
@@ -7,7 +7,7 @@ class Login extends React.Component {
       username: '',
       password: ''
     }
-  };
+  }
 
   handleChange = e => {
     this.setState({
@@ -15,42 +15,44 @@ class Login extends React.Component {
         ...this.state.credentials,
         [e.target.name]: e.target.value
       }
-    });
-  };
+    })
+  }
 
   login = e => {
-    e.preventDefault();
-    axiosWithAuth().post("/login", this.state.credentials)
+    e.preventDefault()
+    axiosWithAuth()
+      .post('http://localhost:5000/api/login', this.state.credentials)
       .then(res => {
-        console.log(res);
-        localStorage.setItem('token', res.data.payload);
-        console.log(this.props)
-        this.props.history.push('/protected')
+        localStorage.setItem('token', res.data.payload)
+        this.props.history.push('./friends')
       })
-      .catch(err => console.error('unable to login: ', err))
-  };
+      .catch(err => {
+        console.error(err.message)
+      })
+  }
 
   render() {
+    console.log(this.state.credentials)
     return (
       <div>
         <form onSubmit={this.login}>
           <input
-            type="text"
-            name="username"
+            type='text'
+            name='username'
             value={this.state.credentials.username}
             onChange={this.handleChange}
           />
           <input
-            type="password"
-            name="password"
+            type='password'
+            name='password'
             value={this.state.credentials.password}
             onChange={this.handleChange}
           />
-          <button>Log in</button>
+          <button>Login</button>
         </form>
       </div>
-    );
+    )
   }
 }
 
-export default Login;
+export default Login
